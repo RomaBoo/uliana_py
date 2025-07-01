@@ -56,19 +56,25 @@ class MainDialog(QDialog):
             self.settings.save("last_dir", os.path.dirname(file_path))
 
 
+
     def confirm_path(self):
-            path = self.ui.filepath_line.text().strip()
-            if path and os.path.exists(path):
-                self.file = path
-                self.settings.save("file", path)
+        path = self.ui.filepath_line.text().strip()
+        if path and os.path.exists(path):
+            self.file = path
+            self.settings.save("file", path)
 
-                # вызываем метод из класса CsvLib, который удаляет первые 13 строк
-                output_path = self.csv_processor.del_lines(path, lines_to_remove=13)
+            # 1. Удаляем первые 12 строк
+            output_path = self.csv_processor.del_lines(path, 12)
 
-                if output_path:
-                    self.accept()
-            else:
-                QMessageBox.warning(self, "Ошибка", "Файл не существует или путь не указан.")
+            if output_path:
+                # 2. Генерируем footprint.json из уже обработанного CSV
+                self.csv_processor.generate_footprint_json(output_path)
+
+                # 3. Закрываем окно
+                self.accept()
+        else:
+            QMessageBox.warning(self, "Ошибка", "Файл не существует или путь не указан.")
+
 
 
 
