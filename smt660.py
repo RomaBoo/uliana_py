@@ -30,7 +30,7 @@ class MainDialog(QDialog):
         file = settings.load("file")
         if file:
             self.ui.filepath_line.setText(file)
-            
+
     def choose_file(self):
         settings = Settings()
         file = settings.load("file")  #  1. Загружаем путь при запуске
@@ -78,6 +78,10 @@ class MainDialog(QDialog):
             if output_path:
                 # 2. Генерируем footprint.json из уже обработанного CSV
                 self.csv_processor.generate_footprint_json(output_path)
+                self.accept()
+
+            if output_path:
+                self.csv_processor.apply_footprint_rotation(output_path)
                 self.accept()
         else:
             QMessageBox.warning(

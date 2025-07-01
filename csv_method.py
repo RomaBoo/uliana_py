@@ -105,3 +105,49 @@ class CsvLib:
 
         except Exception as e:
             QMessageBox.critical(self.parent, "Ошибка", f"Произошла ошибка:\n{e}")
+
+    def apply_footprint_rotation(self, path):
+        try:
+            # Загрузка footprint.json из папки проекта
+            project_dir = os.path.dirname(os.path.abspath(__file__))
+            footprint_path = os.path.join(project_dir, "footprint.json")
+
+            if not os.path.exists(footprint_path):
+                QMessageBox.warning(self.parent, "Ошибка", f"Не найден footprint.json в {footprint_path}")
+                return
+
+            with open(footprint_path, 'r', encoding='utf-8') as f:
+                footprint_data = json.load(f)
+
+            with open(path, newline='', encoding='utf-8') as infile:
+                reader = csv.DictReader(infile)
+                fieldnames = reader.fieldnames
+                rows = list(reader)
+
+            for row in rows:
+                footprint = row.get("Footprint", "").strip()
+                current_rotation = row.get("Rotation", "").replace(",", ".").strip()
+
+                # Приведение к числу
+                try:
+                    current_rotation = float(current_rotation)
+                except ValueError:
+                    continue  # Пропускаем если Rotation не число
+
+                # Добавление значения из footprint.json, если оно есть
+                if footprint in footprint_data and "Rotation" in footprint_data[footprint]:
+                    try:
+                        additional_rotation = float(footprint_data[footprint]["Rotation"])
+                        row["Rotation"] = str(current_rotation + additional_rotation)
+                    except ValueError:
+                        pass
+
+            # Перезапись CSV
+            with open(path, 'w', newline='', encoding='utf-8') as outfile:
+                writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(rows)
+
+            QMessageBox.information(self.parent, "Готово", "Rotation обновлён в файле.")
+        except Exception as e:
+            QMessageBox.critical(self.parent, "Ошибка", f"Ошибка обновления Rotation:\n{e}")
