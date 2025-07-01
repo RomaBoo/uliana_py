@@ -22,6 +22,7 @@ def main():
     except Exception as e:
         error_message = f"Worker: Err: {e}"
         print(error_message)
+
         # self.progress_updated.emit(error_message)
         # self._is_running = False
 
