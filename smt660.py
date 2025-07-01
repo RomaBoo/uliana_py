@@ -30,16 +30,12 @@ class MainDialog(QDialog):
         file = settings.load("file")
         if file:
             self.ui.filepath_line.setText(file)
+            
     def choose_file(self):
-<<<<<<< .mine
         settings = Settings()
         file = settings.load("file")  #  1. Загружаем путь при запуске
     # Проверка: был ли ранее сохранён путь и существует ли он на диске
-=======
-        # Проверка: был ли ранее сохранён путь и существует ли он на диске
 
-
->>>>>>> .theirs
         if file and os.path.exists(file):
             # Если файл существует — начнем с его папки
             start_path = os.path.dirname(file)
