@@ -14,13 +14,7 @@ class MainDialog(QDialog):
         super().__init__()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
-
-        self.settings = Settings()
-        self.file = self.settings.load("file")  #  1. Загружаем путь при запуске
-
-        # Показываем путь в поле, если он есть
-        if self.file:
-            self.ui.filepath_line.setText(self.file)
+        self.init()
 
         self.csv_processor = CsvLib(parent=self)
 
@@ -31,11 +25,20 @@ class MainDialog(QDialog):
             self.confirm_path
         )  # когда кнопка ок нажата то -
 
+    def init(self):
+        settings = Settings()
+        file = settings.load("file")
+        if file:
+            self.ui.filepath_line.setText(file)
+            
     def choose_file(self):
-        # Проверка: был ли ранее сохранён путь и существует ли он на диске
-        if self.file and os.path.exists(self.file):
+        settings = Settings()
+        file = settings.load("file")  #  1. Загружаем путь при запуске
+    # Проверка: был ли ранее сохранён путь и существует ли он на диске
+
+        if file and os.path.exists(file):
             # Если файл существует — начнем с его папки
-            start_path = os.path.dirname(self.file)
+            start_path = os.path.dirname(file)
         else:
             # Иначе начнем с диска D (по умолчанию)
             start_path = "D:/"
@@ -51,22 +54,24 @@ class MainDialog(QDialog):
         # Если пользователь действительно выбрал файл
         if file_path:
             # Сохраняем выбранный путь в переменную экземпляра
-            self.file = file_path
+            file = file_path
 
             # Показываем путь в поле ввода
             self.ui.filepath_line.setText(file_path)
 
             # Сохраняем путь в settings.json, чтобы он запомнился на следующий раз
-            self.settings.save("file", file_path)
+            settings.save("file", file_path)
 
             # Также можно сохранить последнюю открытую папку, если захочешь:
-            self.settings.save("last_dir", os.path.dirname(file_path))
+            settings.save("last_dir", os.path.dirname(file_path))
 
     def confirm_path(self):
+        
+        settings = Settings()
         path = self.ui.filepath_line.text().strip()
         if path and os.path.exists(path):
             self.file = path
-            self.settings.save("file", path)
+            settings.save("file", path)
 
             output_path = self.csv_processor.del_lines(path)
 
