@@ -68,7 +68,7 @@ class MainDialog(QDialog):
 
             if output_path:
                 # 2. Генерируем footprint.json из уже обработанного CSV
-                self.csv_processor.generate_footprint_json(output_path)
+                self.csv_processor.generate_footprint_json(output_path) 
 
                 # 3. Закрываем окно
                 self.accept()
