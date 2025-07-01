@@ -3,6 +3,7 @@ import sys, os
 from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox
 from smt660_ui import Ui_Dialog  # Импортируем UI класс из .ui-файла
 from Settings import Settings
+from csv_method import CsvLib
 
 
 class MainDialog(QDialog):
@@ -17,6 +18,8 @@ class MainDialog(QDialog):
         # Показываем путь в поле, если он есть
         if self.file:
             self.ui.filepath_line.setText(self.file)
+
+        self.csv_processor = CsvLib(parent=self)
 
         self.ui.searchfile_button.clicked.connect(self.choose_file) #когда кнопка ... нажата то -
         self.ui.ok_button.clicked.connect(self.confirm_path) #когда кнопка ок нажата то -
@@ -54,31 +57,16 @@ class MainDialog(QDialog):
 
 
     def confirm_path(self):
-        # 📥 3. Сохраняем и путь, введённый вручную
             path = self.ui.filepath_line.text().strip()
             if path and os.path.exists(path):
                 self.file = path
                 self.settings.save("file", path)
 
-                # 📄 7. Удаляем первые 13 строк из CSV и сохраняем как .txt
-                try:
-                    with open(path, 'r', encoding='utf-8') as f:
-                        lines = f.readlines()
+                # вызываем метод из класса CsvLib, который удаляет первые 13 строк
+                output_path = self.csv_processor.del_lines(path, lines_to_remove=13)
 
-                    # Убираем первые 13 строк
-                    cleaned_lines = lines[12:]
-
-                    # Создаём путь для .txt файла рядом с исходным
-                    output_path = os.path.splitext(path)[0] + "_processed.csv"
-
-                    with open(output_path, 'w', encoding='utf-8') as f:
-                        f.writelines(cleaned_lines)
-
-                    QMessageBox.information(self, "Файл обработан", f"Результат сохранён в:\n{output_path}")
+                if output_path:
                     self.accept()
-
-                except Exception as e:
-                    QMessageBox.critical(self, "Ошибка обработки", f"Произошла ошибка:\n{e}")
             else:
                 QMessageBox.warning(self, "Ошибка", "Файл не существует или путь не указан.")
 
