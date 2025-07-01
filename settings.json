@@ -7,7 +7,8 @@
     },
     "coloumns": [
         "Footprint",
-        "Rotation"
+        "Rotation",
+        "FeedT"
     ],
     "last_dir": "Z:/SMT_and_other/SMT-machines/prj/test"
 }
