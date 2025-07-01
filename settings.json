@@ -1,0 +1,14 @@
+{
+    "file": "Z:/SMT_and_other/SMT-machines/prj/test/Pick Place for SiC_DRV_PSUv0.1.0.csv",
+    "server": {
+        "url": "http://parts.efps",
+        "username": "admin",
+        "password": "EFPS1.parts"
+    },
+    "coloumns": [
+        "Footprint",
+        "Rotation",
+        "FeedT"
+    ],
+    "last_dir": "Z:/SMT_and_other/SMT-machines/prj/test"
+}

@@ -5,12 +5,13 @@ import requests
 from inventree.api import InvenTreeAPI
 from inventree.company import Company
 from inventree.part import Part, PartCategory
+from inventree.stock import StockItem, StockLocation
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 
-INVENTREE_API_URL = "http://inventree.efps"  # Замени на свой URL
-INVENTREE_API_TOKEN = "token"  # Замени на свой токен
-INVENTREE_API_USERNAME = "admin"  # Замени на свое имя пользователя
-INVENTREE_API_PASSWORD = "1"  # Замени на свой пароль
+# INVENTREE_API_URL = "http://inventree.efps"  # Замени на свой URL
+# INVENTREE_API_TOKEN = "token"  # Замени на свой токен
+# INVENTREE_API_USERNAME = "admin"  # Замени на свое имя пользователя
+# INVENTREE_API_PASSWORD = "1"  # Замени на свой пароль
 
 
 class InvenTreeManager:
@@ -42,6 +43,21 @@ class InvenTreeManager:
     def get_parts(self, part_name):
         parts = Part.list(self.api, filters={"name": part_name})
         return parts
+
+    def get_part_id_by_name(api, part_name):
+        """Получает ID детали по ее имени. Возвращает ID, если найдена ровно одна деталь, иначе None."""
+        parts = Part.list(api, filters={"name": part_name})
+        if parts and len(parts) == 1:
+            return parts[0].pk
+        elif parts and len(parts) > 1:
+            print(
+                f"Предупреждение: Найдено несколько деталей с именем '{part_name}'. Возвращается ID первой найденной."
+            )
+            # В реальном приложении здесь можно запросить уточнение у пользователя
+            return parts[0].pk
+        else:
+            print(f"Деталь с именем '{part_name}' не найдена.")
+            return None
 
     def get_cats(self):
         cat_path_list = PartCategory.list(self.api, filters={"parent": "null"})
@@ -107,17 +123,18 @@ class InvenTreeManager:
 
 
 def main():
+    None
 
-    itm = InvenTreeManager(
-        INVENTREE_API_URL,
-        INVENTREE_API_USERNAME,
-        INVENTREE_API_PASSWORD,
-    )
-    try:
-        itm.connect()
-    except Exception as e:
-        print(f"Connect err InvenTree API: {e}")
-        return
+    # itm = InvenTreeManager(
+    #     INVENTREE_API_URL,
+    #     INVENTREE_API_USERNAME,
+    #     INVENTREE_API_PASSWORD,
+    # )
+    # try:
+    #     itm.connect()
+    # except Exception as e:
+    #     print(f"Connect err InvenTree API: {e}")
+    #     return
 
 
 if __name__ == "__main__":

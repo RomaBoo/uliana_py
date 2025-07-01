@@ -1,9 +1,12 @@
-#pyuic5 UI.ui -o smt660_ui.py
-import sys, os
+# pyuic5 UI.ui -o smt660_ui.py
+import os
+import sys
+
 from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMessageBox
-from smt660_ui import Ui_Dialog  # Импортируем UI класс из .ui-файла
-from Settings import Settings
+
 from csv_method import CsvLib
+from Settings import Settings
+from smt660_ui import Ui_Dialog  # Импортируем UI класс из .ui-файла
 
 
 class MainDialog(QDialog):
@@ -15,8 +18,12 @@ class MainDialog(QDialog):
 
         self.csv_processor = CsvLib(parent=self)
 
-        self.ui.searchfile_button.clicked.connect(self.choose_file) #когда кнопка ... нажата то -
-        self.ui.ok_button.clicked.connect(self.confirm_path) #когда кнопка ок нажата то -
+        self.ui.searchfile_button.clicked.connect(
+            self.choose_file
+        )  # когда кнопка ... нажата то -
+        self.ui.ok_button.clicked.connect(
+            self.confirm_path
+        )  # когда кнопка ок нажата то -
 
     def init(self):
         settings = Settings()
@@ -24,9 +31,15 @@ class MainDialog(QDialog):
         if file:
             self.ui.filepath_line.setText(file)
     def choose_file(self):
+<<<<<<< .mine
         settings = Settings()
         file = settings.load("file")  #  1. Загружаем путь при запуске
     # Проверка: был ли ранее сохранён путь и существует ли он на диске
+=======
+        # Проверка: был ли ранее сохранён путь и существует ли он на диске
+
+
+>>>>>>> .theirs
         if file and os.path.exists(file):
             # Если файл существует — начнем с его папки
             start_path = os.path.dirname(file)
@@ -36,10 +49,10 @@ class MainDialog(QDialog):
 
         # Открываем диалог выбора файла, фильтруем только CSV-файлы
         file_path, _ = QFileDialog.getOpenFileName(
-            self,                                 # Родительское окно
-            "Выбери CSV файл",                    # Заголовок диалога
-            start_path,                           # Папка, с которой начнём
-            "CSV files (*.csv)"                   # Фильтр расширений
+            self,  # Родительское окно
+            "Выбери CSV файл",  # Заголовок диалога
+            start_path,  # Папка, с которой начнём
+            "CSV files (*.csv)",  # Фильтр расширений
         )
 
         # Если пользователь действительно выбрал файл
@@ -56,8 +69,6 @@ class MainDialog(QDialog):
             # Также можно сохранить последнюю открытую папку, если захочешь:
             settings.save("last_dir", os.path.dirname(file_path))
 
-
-
     def confirm_path(self):
         
         settings = Settings()
@@ -66,19 +77,16 @@ class MainDialog(QDialog):
             self.file = path
             settings.save("file", path)
 
-            # 1. Удаляем первые 12 строк
-            output_path = self.csv_processor.del_lines(path, 12)
+            output_path = self.csv_processor.del_lines(path)
 
             if output_path:
                 # 2. Генерируем footprint.json из уже обработанного CSV
-                self.csv_processor.generate_footprint_json(output_path) 
-
-                # 3. Закрываем окно
+                self.csv_processor.generate_footprint_json(output_path)
                 self.accept()
         else:
-            QMessageBox.warning(self, "Ошибка", "Файл не существует или путь не указан.")
-
-
+            QMessageBox.warning(
+                self, "Ошибка", "Файл не существует или путь не указан."
+            )
 
 
 if __name__ == "__main__":

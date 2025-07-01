@@ -1,7 +1,9 @@
 import csv
-import os
 import json
+import os
+
 from PyQt5.QtWidgets import QMessageBox
+
 from Settings import Settings
 
 
@@ -12,41 +14,53 @@ class CsvLib:
 
     def del_lines(self, path, lines_to_remove=12):
         if not path or not os.path.exists(path):
-            QMessageBox.warning(self.parent, "Ошибка", "Файл не существует или путь не указан.")
+            QMessageBox.warning(
+                self.parent, "Ошибка", "Файл не существует или путь не указан."
+            )
             return
 
         try:
-            with open(path, 'r', encoding='utf-8') as f:
+            with open(path, "r", encoding="utf-8") as f:
                 lines = f.readlines()
 
             cleaned_lines = lines[lines_to_remove:]
             output_path = os.path.splitext(path)[0] + "_processed.csv"
 
-            with open(output_path, 'w', encoding='utf-8') as f:
+            with open(output_path, "w", encoding="utf-8") as f:
                 f.writelines(cleaned_lines)
 
-            QMessageBox.information(self.parent, "Файл обработан", f"Результат сохранён в:\n{output_path}")
+            QMessageBox.information(
+                self.parent, "Файл обработан", f"Результат сохранён в:\n{output_path}"
+            )
             return output_path
 
         except Exception as e:
-            QMessageBox.critical(self.parent, "Ошибка обработки", f"Произошла ошибка:\n{e}")
+            QMessageBox.critical(
+                self.parent, "Ошибка обработки", f"Произошла ошибка:\n{e}"
+            )
 
     def generate_footprint_json(self, path):
         if not path or not os.path.exists(path):
-            QMessageBox.warning(self.parent, "Ошибка", "Файл не существует или путь не указан.")
+            QMessageBox.warning(
+                self.parent, "Ошибка", "Файл не существует или путь не указан."
+            )
             return
 
         try:
-            columns = self.settings.load("coloumns")  # ["Footprint", "Rotation", "FeedT"]
+            columns = self.settings.load(
+                "coloumns"
+            )  # ["Footprint", "Rotation", "FeedT"]
             if not isinstance(columns, list) or len(columns) < 2:
-                QMessageBox.warning(self.parent, "Ошибка", "Некорректные настройки колонок.")
+                QMessageBox.warning(
+                    self.parent, "Ошибка", "Некорректные настройки колонок."
+                )
                 return
 
             key_column = columns[0]
             value_columns = columns[1:]
             result = {}
 
-            with open(path, newline='', encoding='utf-8') as file:
+            with open(path, newline="", encoding="utf-8") as file:
                 reader = csv.DictReader(file)
 
                 # 🔎 Проверка: все ли нужные колонки есть в CSV
@@ -57,7 +71,7 @@ class CsvLib:
                         self.parent,
                         "Ошибка колонок",
                         f"Не найдены колонки в CSV: {', '.join(missing)}\n\n"
-                        f"Доступные заголовки: {', '.join(fieldnames or [])}"
+                        f"Доступные заголовки: {', '.join(fieldnames or [])}",
                     )
                     return
 
@@ -76,13 +90,17 @@ class CsvLib:
 
                         result[key] = entry
 
-            project_dir = os.path.dirname(os.path.abspath(__file__))  # путь к текущему .py-файлу
+            project_dir = os.path.dirname(
+                os.path.abspath(__file__)
+            )  # путь к текущему .py-файлу
             output_path = os.path.join(project_dir, "footprint.json")
 
-            with open(output_path, 'w', encoding='utf-8') as f:
+            with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(result, f, indent=4, ensure_ascii=False)
 
-            QMessageBox.information(self.parent, "Готово", f"Файл footprint.json создан:\n{output_path}")
+            QMessageBox.information(
+                self.parent, "Готово", f"Файл footprint.json создан:\n{output_path}"
+            )
             return output_path
 
         except Exception as e:
