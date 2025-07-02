@@ -26,6 +26,9 @@ class InvenTreeManager:
         self.password = password
         self.token = token
         self._is_running = False
+        self.parts = None
+        self.stock_items = None
+        self.locations = None
 
     def connect(self):
         try:
@@ -44,19 +47,81 @@ class InvenTreeManager:
         parts = Part.list(self.api, filters={"name": part_name})
         return parts
 
-    def get_part_id_by_name(api, part_name):
-        """Получает ID детали по ее имени. Возвращает ID, если найдена ровно одна деталь, иначе None."""
-        parts = Part.list(api, filters={"name": part_name})
-        if parts and len(parts) == 1:
-            return parts[0].pk
-        elif parts and len(parts) > 1:
+    def get_part_id_by_name(self, api, part_name):
+        if not self.parts:
+            self.parts = self.get_parts(part_name)
+
+        for part in self.parts:
+            name = part.name.lower()
+            if name == part_name.lower():
+                return part.pk
+        return None
+
+    def get_stock_locations_for_part_name(self, part_name):
+        """
+        Получает список уникальных StockLocation (имя и ID) для детали по ее имени.
+        """
+        api = self.api
+        part_id = self.get_part_id_by_name(api, part_name)
+        if not part_id:
+            return []
+
+        print(f"Поиск расположений для детали '{part_name}' (ID: {part_id})...")
+
+        try:
+            # Получаем все StockItem'ы, связанные с данной деталью
+            if not self.stock_items:
+                self.stock_items = StockItem.list(api, filters={"part": None})
+
+            if not self.locations:
+                self.locations = StockLocation.list(api, filters={"name": None})
+
+            unique_locations = {}
+
+            for item in self.stock_items:
+                None
+                part_id_loc = item._data.get("part")
+                if part_id == part_id_loc:
+                    location_id = item.pk
+
+                    for location in self.locations:
+                        # location_pk = location.pk
+                        if location.pk == item._data.get("location"):
+                            loc_type = location._data.get("location_type_detail")
+                            if location_id not in unique_locations:
+                                unique_locations = {
+                                    "id": location_id,
+                                    "name": location._data.get("name"),
+                                    "path": location._data.get("pathstring"),
+                                    "type": loc_type["name"],
+                                    "feed": loc_type["description"],
+                                }
+
+            return unique_locations
+
+        except Exception as e:
             print(
-                f"Предупреждение: Найдено несколько деталей с именем '{part_name}'. Возвращается ID первой найденной."
+                f"Произошла ошибка при получении StockLocation для детали '{part_name}': {e}"
             )
-            # В реальном приложении здесь можно запросить уточнение у пользователя
-            return parts[0].pk
+            return []
+
+    def get_smt600_locations_for_part_name(self, part_name, feeder_type):
+        stock_location = self.get_stock_locations_for_part_name(part_name)
+        if not stock_location:
+            return None
+
+        if stock_location["feed"] != "Feeder":
+            return None
+
+        if stock_location["type"] != feeder_type:
+            return None
+
+        fpth = stock_location["path"]
+        if "SMT660/Feeder/FP_" in fpth:
+            fpth = fpth.split("/")
+            fplace = int(fpth[2].replace("FP_", ""))
+            return fplace
         else:
-            print(f"Деталь с именем '{part_name}' не найдена.")
             return None
 
     def get_cats(self):
