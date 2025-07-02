@@ -83,6 +83,11 @@ class MainDialog(QDialog):
             if output_path:
                 self.csv_processor.apply_footprint_rotation(output_path)
                 self.accept()
+
+            if output_path:
+                self.csv_processor.update_feedn_from_inventree(output_path)
+                self.accept()
+            
         else:
             QMessageBox.warning(
                 self, "Ошибка", "Файл не существует или путь не указан."
