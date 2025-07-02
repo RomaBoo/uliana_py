@@ -1,118 +1,94 @@
 {
-    "REFER": {
-        "Rotation": 90.0,
-        "FeedT": "Auto"
-    },
-    "0402R": {
-        "Rotation": 270.0,
-        "FeedT": "CL8-2"
-    },
     "0402C": {
         "Rotation": 90.0,
         "FeedT": "CL8-2"
     },
-    "0603R": {
-        "Rotation": 90.0,
-        "FeedT": "CL8-4"
+    "0402R": {
+        "Rotation": 180.0,
+        "FeedT": "CL8-2"
     },
     "0603C": {
-        "Rotation": 0.0,
-        "FeedT": "CL8-4"
-    },
-    "0603DB_C": {
-        "Rotation": 180.0,
-        "FeedT": "Tray"
-    },
-    "0805C": {
         "Rotation": 270.0,
         "FeedT": "CL8-4"
     },
-    "EQFPS20x20-144N": {
-        "Rotation": 90.0,
-        "FeedT": "Tray"
+    "0603R": {
+        "Rotation": 270.0,
+        "FeedT": "CL8-4"
     },
-    "1206R": {
+    "0805C": {
+        "Rotation": 135.0,
+        "FeedT": "CL8-4"
+    },
+    "0805R": {
         "Rotation": 0.0,
         "FeedT": "CL8-4"
     },
-    "1206C_": {
-        "Rotation": 180.0,
+    "1206C": {
+        "Rotation": 270.0,
         "FeedT": "CL8-4"
+    },
+    "1206C_": {
+        "Rotation": 270.0,
+        "FeedT": "CL8-4"
+    },
+    "1206R": {
+        "Rotation": 0.0,
+        "FeedT": "Tray"
     },
     "1210C": {
         "Rotation": 0.0,
         "FeedT": "CL8-4"
     },
-    "SOD-123": {
-        "Rotation": 90.0,
-        "FeedT": "CL8-4"
-    },
-    "ACP3225": {
+    "ABM7": {
         "Rotation": 0.0,
-        "FeedT": "CL8-4"
+        "FeedT": "CL12"
     },
-    "QFN50P300X300X80-17N-D": {
-        "Rotation": 270.0,
+    "BCL322520RT": {
+        "Rotation": 0.0,
         "FeedT": "Tray"
     },
-    "SOP65P490X110-8N": {
-        "Rotation": 270.0,
+    "CLF5030NIT": {
+        "Rotation": 0.0,
+        "FeedT": "CL12"
+    },
+    "DFE252012P": {
+        "Rotation": 180.0,
+        "FeedT": "CL8-4"
+    },
+    "LQFP48-7mm": {
+        "Rotation": 0.0,
+        "FeedT": "Tray"
+    },
+    "REFER": {
+        "Rotation": 90.0,
         "FeedT": "Tray"
     },
     "SO-8": {
-        "Rotation": 0.0,
-        "FeedT": "Tray"
-    },
-    "SOT23-5": {
         "Rotation": 90.0,
         "FeedT": "Tray"
     },
-    "sc-70-3": {
-        "Rotation": 90.0,
-        "FeedT": "CL8-4"
-    },
-    "DFE252012P": {
-        "Rotation": 0.0,
-        "FeedT": "CL8-4"
-    },
-    "SCO-22": {
-        "Rotation": 270.0,
-        "FeedT": "Tray"
-    },
-    "1812C": {
-        "Rotation": 0.0,
+    "SOD-123": {
+        "Rotation": 180.0,
         "FeedT": "CL8-4"
     },
     "SOT-23_123": {
-        "Rotation": 0.0,
-        "FeedT": "Tray"
+        "Rotation": 270.0,
+        "FeedT": "CL8-4"
     },
-    "SOT23-8": {
-        "Rotation": 90.0,
-        "FeedT": "Tray"
-    },
-    "SOIC127P1030X265-16N": {
-        "Rotation": 0.0,
-        "FeedT": "Tray"
+    "SOT23-5": {
+        "Rotation": 270.0,
+        "FeedT": "CL8-4"
     },
     "SOT-23-6N": {
-        "Rotation": 90.0,
-        "FeedT": "Tray"
-    },
-    "0603DR_C": {
-        "Rotation": 0.0,
-        "FeedT": "Tray"
-    },
-    "0603DG_C": {
-        "Rotation": 0.0,
-        "FeedT": "Tray"
-    },
-    "SOT95P280X145-5N": {
         "Rotation": 270.0,
         "FeedT": "Tray"
     },
-    "SOT-23-5N": {
-        "Rotation": 180.0,
+    "SOT95P280X145-6N-7-V": {
+        "Rotation": 0.0,
+        "FeedT": "Tray"
+    },
+    "VSSOP50P490X110-10N": {
+        "Rotation": 90.0,
         "FeedT": "Tray"
     }
 }

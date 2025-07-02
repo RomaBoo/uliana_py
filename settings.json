@@ -1,5 +1,5 @@
 {
-    "file": "D:/Project/smt660_ulyana/uliana_py/Pick Place for INV55_VCSv0.4.0.csv",
+    "file": "D:/2/Pick Place for SiC_DRV_PSUv0.1.0.csv",
     "server": {
         "url": "http://192.168.0.17",
         "username": "admin",
@@ -10,5 +10,5 @@
         "Rotation",
         "FeedT"
     ],
-    "last_dir": "D:/Project/smt660_ulyana/uliana_py"
+    "last_dir": "D:/2"
 }

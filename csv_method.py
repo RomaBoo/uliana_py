@@ -47,10 +47,25 @@ class CsvLib:
             )
             return
 
+        project_dir = os.path.dirname(os.path.abspath(__file__))
+        output_path = os.path.join(project_dir, "footprint.json")
+
+        # 📦 Если файл уже существует — просто читаем его и возвращаем путь
+        if os.path.exists(output_path):
+            try:
+                with open(output_path, "r", encoding="utf-8") as f:
+                    json.load(f)  # проверка на валидность JSON
+                print("footprint.json уже существует. Пропускаем генерацию.")
+                return output_path
+            except Exception as e:
+                QMessageBox.critical(
+                    self.parent, "Ошибка", f"Файл footprint.json повреждён:\n{e}"
+                )
+                return
+
+        # 🛠 Если файла нет — создаём его
         try:
-            columns = self.settings.load(
-                "coloumns"
-            )  # ["Footprint", "Rotation", "FeedT"]
+            columns = self.settings.load("coloumns")  # ["Footprint", "Rotation", "FeedT"]
             if not isinstance(columns, list) or len(columns) < 2:
                 QMessageBox.warning(
                     self.parent, "Ошибка", "Некорректные настройки колонок."
@@ -64,7 +79,6 @@ class CsvLib:
             with open(path, newline="", encoding="utf-8") as file:
                 reader = csv.DictReader(file)
 
-                # 🔎 Проверка: все ли нужные колонки есть в CSV
                 fieldnames = reader.fieldnames
                 missing = [col for col in columns if col not in fieldnames]
                 if missing:
@@ -78,7 +92,6 @@ class CsvLib:
 
                 for row in reader:
                     key = row[key_column].strip()
-
                     if key not in result:
                         entry = {}
                         for col in value_columns:
@@ -90,11 +103,6 @@ class CsvLib:
                             entry[col] = val
 
                         result[key] = entry
-
-            project_dir = os.path.dirname(
-                os.path.abspath(__file__)
-            )  # путь к текущему .py-файлу
-            output_path = os.path.join(project_dir, "footprint.json")
 
             with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(result, f, indent=4, ensure_ascii=False)

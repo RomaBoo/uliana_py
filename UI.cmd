@@ -1,0 +1,1 @@
+pyuic5 UI.ui -o smt660_ui.py
